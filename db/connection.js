@@ -1,4 +1,4 @@
-require("dotenv").config();
+require("dotenv").config({ path: "../.env" });
 
 const mysql = require("mysql");
 
@@ -9,12 +9,10 @@ const connection = mysql.createConnection({
   port: 3306,
 
   // Your username
-  user: "root",
-  //process.env.DB_USERNAME
+  user: process.env.DB_USERNAME,
 
   // Be sure to update with your own MySQL password!
-  password: "kroh1031",
-  //process.env.DB_PASSWORD
+  password: process.env.DB_PASSWORD,
 
   database: process.env.DB_DATABASE,
 });
