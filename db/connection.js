@@ -1,3 +1,5 @@
+require("dotenv").config();
+
 const mysql = require("mysql");
 
 const connection = mysql.createConnection({
@@ -8,14 +10,17 @@ const connection = mysql.createConnection({
 
   // Your username
   user: "root",
+  //process.env.DB_USERNAME
 
   // Be sure to update with your own MySQL password!
   password: "kroh1031",
-  database: "employee_trackerDB",
+  //process.env.DB_PASSWORD
+
+  database: process.env.DB_DATABASE,
 });
 
 connection.connect((err) => {
   if (err) throw err;
-  console.log(`connected as id ${connection.threadId}`);
+  console.log(`Connected as id ${connection.threadId}`);
   connection.end();
 });
