@@ -31,10 +31,10 @@ connection.connect((err) => {
 //What would you like to do?
 //Choices
 //Add Department
-//Add Role  
+//Add Role
 //Add Employee
-
 //View All Departments
 //View All Roles
 //View All Employees
 //Update Employee Role
+//Quit
