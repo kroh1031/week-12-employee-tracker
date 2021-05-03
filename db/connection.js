@@ -22,3 +22,19 @@ connection.connect((err) => {
   console.log(`Connected as id ${connection.threadId}`);
   connection.end();
 });
+
+// Build a command-line application that at a minimum allows the user to:
+// Add departments, roles, employees
+// View departments, roles, employees
+// Update employee roles
+
+//What would you like to do?
+//Choices
+//Add Department
+//Add Role  
+//Add Employee
+
+//View All Departments
+//View All Roles
+//View All Employees
+//Update Employee Role
