@@ -88,7 +88,12 @@ const addDepartment = () => {
 const addRole = () => {};
 const addEmployee = () => {};
 const viewDepartments = () => {
-  
+  connection.query("SELECT * FROM department", (err, res) => {
+    if (err) throw err;
+    //replace with console.table to print MySQL rows to the console
+    console.log(res);
+    start();
+  });
 };
 const viewRoles = () => {};
 const viewEmployees = () => {};
