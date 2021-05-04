@@ -2,6 +2,7 @@ require("dotenv").config({ path: "../.env" });
 
 const mysql = require("mysql");
 const inquirer = require("inquirer");
+const cTable = require("console.table");
 
 const connection = mysql.createConnection({
   host: "localhost",
@@ -57,6 +58,10 @@ const start = () => {
           viewDepartments();
         case "View All Roles":
           viewRoles();
+        case "View All Employees":
+          viewEmployees();
+        case "Update Employee Role":
+          updateEmployeeRole();
         default:
           connection.end();
           break;
@@ -85,13 +90,48 @@ const addDepartment = () => {
       );
     });
 };
-const addRole = () => {};
+const addRole = () => {
+  //fetch all roles
+  inquirer
+    .prompt([
+      {
+        name: "roleName",
+        type: "input",
+        message: "What is the name of the role?",
+      },
+      {
+        name: "roleSalary",
+        type: "input",
+        message: "What is the salary of the role?",
+      },
+      {
+        name: "roleName",
+        type: "list",
+        message: "Which department does the role belong to?",
+        choices: [],
+      },
+    ])
+    .then((response) => {
+      connection.query(
+        "INSERT INTO role SET ?",
+        {
+          title: response.roleName,
+          salary: response.roleSalary,
+        },
+        (err) => {
+          if (err) throw err;
+          console.log(`Added ${response.roleName} to the database`);
+          start();
+        }
+      );
+    });
+};
 const addEmployee = () => {};
 const viewDepartments = () => {
   connection.query("SELECT * FROM department", (err, res) => {
     if (err) throw err;
     //replace with console.table to print MySQL rows to the console
-    console.log(res);
+    console.table(res);
     start();
   });
 };
