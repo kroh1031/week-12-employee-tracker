@@ -91,60 +91,57 @@ const addDepartment = () => {
     });
 };
 
-let mappedRoles;
 const addRole = () => {
   connection.query("SELECT name, id FROM department", (err, results) => {
     if (err) throw err;
     // console.log(results);
-    mappedRoles = results.map((department) => {
+    const mappedResults = results.map((department) => {
       return {
         name: department.name,
         value: department.id,
       };
     });
-    // console.log(mappedResults);
-  });
-  //fetch all roles
-  inquirer
-    .prompt([
-      {
-        name: "roleName",
-        type: "input",
-        message: "What is the name of the role?",
-      },
-      {
-        name: "roleSalary",
-        type: "input",
-        message: "What is the salary of the role?",
-      },
-      {
-        name: "roleDept",
-        type: "list",
-        message: "Which department does the role belong to?",
-        choices: ["test1", "test2", "test3"],
-      },
-    ])
-    .then((response) => {
-      connection.query(
-        "INSERT INTO role SET ?",
+    console.table(mappedResults);
+    inquirer
+      .prompt([
         {
-          title: response.roleName,
-          salary: response.roleSalary,
-          department_id: response.roleDept,
+          name: "roleName",
+          type: "input",
+          message: "What is the name of the role?",
         },
-        (err) => {
-          if (err) throw err;
-          console.log(`Added ${response.roleName} to the database`);
-          start();
-        }
-      );
-    });
+        {
+          name: "roleSalary",
+          type: "input",
+          message: "What is the salary of the role?",
+        },
+        {
+          name: "roleDept",
+          type: "list",
+          message: "Which department does the role belong to?",
+          choices: mappedResults,
+        },
+      ])
+      .then((response) => {
+        connection.query(
+          "INSERT INTO role SET ?",
+          {
+            title: response.roleName,
+            salary: response.roleSalary,
+            department_id: response.roleDept,
+          },
+          (err) => {
+            if (err) throw err;
+            console.log(`Added ${response.roleName} to the database`);
+            start();
+          }
+        );
+      });
+  });
 };
 const addEmployee = () => {};
 const viewDepartments = () => {
   connection.query("SELECT * FROM department", (err, res) => {
     if (err) throw err;
-    //replace with console.table to print MySQL rows to the console
     console.table(res);
     start();
   });
