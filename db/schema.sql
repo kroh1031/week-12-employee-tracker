@@ -27,3 +27,5 @@ CREATE TABLE employee (
   FOREIGN KEY (manager_id) REFERENCES employee(id),
   PRIMARY KEY (id)
 );
+
+-- SELECT role.title AS role, department.name AS department, role.salary FROM role LEFT JOIN department ON role.department_id = department.id

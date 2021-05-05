@@ -1,4 +1,3 @@
-SELECT * FROM department;
 INSERT INTO department (name)
 VALUES 
 ("Engineering"),
@@ -6,27 +5,25 @@ VALUES
 ("Legal"),
 ("Sales");
 
-SELECT * FROM role;
-INSERT INTO role (title, department_id, salary)
+INSERT INTO role (title, salary, department_id)
 VALUES 
-("Sales Lead", "Sales", 100000)
-("Salesperson", "Sales", 80000)
-("Lead Engineer", "Engineering", 150000)
-("Software Engineer", "Engineering", 120000)
-("Account Manager", "Finance", 160000)
-("Accountant", "Finance", 125000)
-("Legal Team Lead", "Legal", 250000)
-("Lawyer", "Legal", 190000)
+("Sales Lead", 100000, 4),
+("Salesperson", 80000, 4),
+("Lead Engineer", 150000, 1),
+("Software Engineer", 120000, 1),
+("Account Manager", 160000, 2),
+("Accountant", 125000, 2),
+("Legal Team Lead", 250000, 3),
+("Lawyer", 190000, 3);
 
-SELECT * FROM employee;
-INSERT INTO employee (first_name, last_name, role_id)
+INSERT INTO employee (first_name, last_name, role_id, manager_id)
 VALUES 
-("John", "Doe", "Sales Lead (title)", "Sales(department)", "100000 (salary)")
-("Mike", "Chan", "Salesperson", "Sales", 80000)
-("Ashley", "Rodriguez", "Lead Engineer", "Engineering", 150000)
-("Kevin", "Tupik", "Software Engineer", "Engineering", 120000)
-("Kunal", "Singh", "Account Manager", "Finance", 160000)
-("Malia", "Brown", "Accountant", "Finance", 125000)
-("Sarah", "Lourd", "Legal Team Lead", "Legal", 250000)
-("Tom", "Allen", "Lawyer", "Legal", 190000)
+("John", "Doe", 1, NULL),
+("Mike", "Chan", 2, 1),
+("Ashley", "Rodriguez", 3, NULL),
+("Kevin", "Tupik", 4, 3),
+("Kunal", "Singh", 5, NULL),
+("Malia", "Brown", 6, 5),
+("Sarah", "Lourd", 7, NULL),
+("Tom", "Allen", 8, 7);
 

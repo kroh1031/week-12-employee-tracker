@@ -90,7 +90,20 @@ const addDepartment = () => {
       );
     });
 };
+
+let mappedRoles;
 const addRole = () => {
+  connection.query("SELECT name, id FROM department", (err, results) => {
+    if (err) throw err;
+    // console.log(results);
+    mappedRoles = results.map((department) => {
+      return {
+        name: department.name,
+        value: department.id,
+      };
+    });
+    // console.log(mappedResults);
+  });
   //fetch all roles
   inquirer
     .prompt([
@@ -105,10 +118,10 @@ const addRole = () => {
         message: "What is the salary of the role?",
       },
       {
-        name: "roleName",
+        name: "roleDept",
         type: "list",
         message: "Which department does the role belong to?",
-        choices: [],
+        choices: ["test1", "test2", "test3"],
       },
     ])
     .then((response) => {
@@ -117,6 +130,7 @@ const addRole = () => {
         {
           title: response.roleName,
           salary: response.roleSalary,
+          department_id: response.roleDept,
         },
         (err) => {
           if (err) throw err;
