@@ -56,12 +56,16 @@ const start = () => {
           break;
         case "View All Departments":
           viewDepartments();
+          break;
         case "View All Roles":
           viewRoles();
+          break;
         case "View All Employees":
           viewEmployees();
+          break;
         case "Update Employee Role":
           updateEmployeeRole();
+          break;
         default:
           connection.end();
           break;
@@ -70,25 +74,28 @@ const start = () => {
 };
 
 const addDepartment = () => {
-  inquirer
-    .prompt({
-      name: "departmentName",
-      type: "input",
-      message: "What is the name of the department?",
-    })
-    .then((response) => {
-      connection.query(
-        "INSERT INTO department SET ?",
-        {
-          name: response.departmentName,
-        },
-        (err) => {
-          if (err) throw err;
-          console.log(`Added ${response.departmentName} to the database`);
-          start();
-        }
-      );
-    });
+  connection.query("SELECT name FROM department", (err) => {
+    if (err) throw err;
+    inquirer
+      .prompt({
+        name: "departmentName",
+        type: "input",
+        message: "What is the name of the department?",
+      })
+      .then((response) => {
+        connection.query(
+          "INSERT INTO department SET ?",
+          {
+            name: response.departmentName,
+          },
+          (err) => {
+            if (err) throw err;
+            console.log(`Added ${response.departmentName} to the database`);
+            start();
+          }
+        );
+      });
+  });
 };
 
 const addRole = () => {
