@@ -73,6 +73,7 @@ const start = () => {
     });
 };
 
+// Add new department
 const addDepartment = () => {
   connection.query("SELECT name FROM department", (err) => {
     if (err) throw err;
@@ -98,6 +99,7 @@ const addDepartment = () => {
   });
 };
 
+// Add new role
 const addRole = () => {
   connection.query("SELECT name, id FROM department", (err, results) => {
     if (err) throw err;
@@ -145,7 +147,11 @@ const addRole = () => {
       });
   });
 };
+
+// Add new employee
 const addEmployee = () => {};
+
+// View all departments
 const viewDepartments = () => {
   connection.query("SELECT * FROM department", (err, res) => {
     if (err) throw err;
@@ -153,8 +159,20 @@ const viewDepartments = () => {
     start();
   });
 };
-const viewRoles = () => {};
+
+// View all roles
+const viewRoles = () => {
+  connection.query("SELECT * FROM role", (err, res) => {
+    if (err) throw err;
+    console.table(res);
+    start();
+  });
+};
+
+// View all employees
 const viewEmployees = () => {};
+
+// Update an employee role
 const updateEmployeeRole = () => {};
 // Build a command-line application that at a minimum allows the user to:
 // Add departments, roles, employees
@@ -162,7 +180,6 @@ const updateEmployeeRole = () => {};
 // Update employee roles
 
 //What would you like to do?
-//Choices
 //Add Department
 //Add Role
 //Add Employee
