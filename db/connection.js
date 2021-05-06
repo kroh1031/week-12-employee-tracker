@@ -224,7 +224,16 @@ const viewRoles = () => {
 };
 
 // View all employees
-const viewEmployees = () => {};
+const viewEmployees = () => {
+  connection.query(
+    "SELECT e.id, e.first_name, e.last_name, r.title AS role, d.name AS department, r.salary, e.manager_id FROM role r LEFT JOIN department d ON r.department_id = d.id LEFT JOIN employee e ON r.id = e.role_id",
+    (err, res) => {
+      if (err) throw err;
+      console.table(res);
+      start();
+    }
+  );
+};
 
 // Update an employee role
 const updateEmployeeRole = () => {};

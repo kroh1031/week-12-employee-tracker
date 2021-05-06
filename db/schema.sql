@@ -28,4 +28,4 @@ CREATE TABLE employee (
   PRIMARY KEY (id)
 );
 
--- SELECT role.title AS role, department.name AS department, role.salary FROM role LEFT JOIN department ON role.department_id = department.id
+-- SELECT e.id, e.first_name, e.last_name, r.title AS role, d.name AS department, r.salary, e.manager_id FROM role r LEFT JOIN department d ON r.department_id = d.id LEFT JOIN employee e ON r.id = e.role_id
