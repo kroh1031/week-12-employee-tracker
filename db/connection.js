@@ -150,62 +150,59 @@ const addRole = () => {
 
 // Add new employee (id, first_name, last_name, role_id(title), department, salary, manager_id(manager))
 const addEmployee = () => {
-  connection.query(
-    "SELECT role.id, role.title, department.name AS department, role.salary FROM role LEFT JOIN department ON role.department_id = department.id",
-    (err, results) => {
-      if (err) throw err;
-      // console.table(results);
-      const mappedResults = results.map((role) => {
-        return {
-          name: role.title,
-          value: role.id,
-        };
+  connection.query("SELECT id, title FROM role", (err, results) => {
+    if (err) throw err;
+    // console.table(results);
+    const mappedResults = results.map((role) => {
+      return {
+        name: role.title,
+        value: role.id,
+      };
+    });
+    console.table(mappedResults);
+    inquirer
+      .prompt([
+        {
+          name: "firstName",
+          type: "input",
+          message: "What is the employee's first name?",
+        },
+        {
+          name: "lastName",
+          type: "input",
+          message: "What is the employee's last name?",
+        },
+        {
+          name: "employeeRole",
+          type: "list",
+          message: "What is the employee's role?",
+          choices: mappedResults,
+        },
+        // {
+        //   name: "manager",
+        //   type: "list",
+        //   message: "Who is the employee's manager?",
+        //   choices: [],
+        // },
+      ])
+      .then((response) => {
+        connection.query(
+          "INSERT INTO employee SET ?",
+          {
+            first_name: response.firstName,
+            last_name: response.lastName,
+            role_id: response.employeeRole,
+          },
+          (err) => {
+            if (err) throw err;
+            console.log(
+              `Added ${response.firstName} ${response.lastName} to the database`
+            );
+            start();
+          }
+        );
       });
-      console.table(mappedResults);
-      inquirer
-        .prompt([
-          {
-            name: "firstName",
-            type: "input",
-            message: "What is the employee's first name?",
-          },
-          {
-            name: "lastName",
-            type: "input",
-            message: "What is the employee's last name?",
-          },
-          {
-            name: "employeeRole",
-            type: "list",
-            message: "What is the employee's role?",
-            choices: mappedResults,
-          },
-          // {
-          //   name: "manager",
-          //   type: "list",
-          //   message: "Who is the employee's manager?",
-          //   choices: [],
-          // },
-        ])
-        .then((response) => {
-          connection.query(
-            "INSERT INTO employee SET ?",
-            {
-              first_name: response.firstName,
-              last_name: response.lastName,
-              role_id: response.employeeRole,
-            },
-            (err) => {
-              if (err) throw err;
-              console.log(
-                `Added ${response.firstName} ${response.lastName} to the database`
-              );
-              start();
-            }
-          );
-        });
-    }
-  );
+  });
 };
 
 // View all departments
