@@ -216,11 +216,14 @@ const viewDepartments = () => {
 
 // View all roles
 const viewRoles = () => {
-  connection.query("SELECT * FROM role", (err, res) => {
-    if (err) throw err;
-    console.table(res);
-    start();
-  });
+  connection.query(
+    "SELECT r.id, r.title AS role, d.name AS department, r.salary FROM role r LEFT JOIN department d ON r.department_id = d.id",
+    (err, res) => {
+      if (err) throw err;
+      console.table(res);
+      start();
+    }
+  );
 };
 
 // View all employees
