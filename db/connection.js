@@ -148,13 +148,13 @@ const addRole = () => {
   });
 };
 
-// Add new employee (id, first_name, last_name, role_id(title), department, salary, manager_id(manager))
+// Add new employee
 const addEmployee = () => {
   connection.query(
     "SELECT r.id, r.title, m.first_name, m.last_name FROM employee e LEFT JOIN employee m ON e.id = m.manager_id LEFT JOIN role r ON e.role_id = r.id",
     (err, results) => {
       if (err) throw err;
-      // console.table(results);
+      console.table(results);
       const mappedRoles = results.map((role) => {
         return {
           name: role.title,
@@ -167,8 +167,10 @@ const addEmployee = () => {
           value: manager.id,
         };
       });
-      console.table(mappedRoles);
-      console.table(mappedManagers);
+      // Includes duplicates
+      // console.table(mappedRoles);
+      // Includes null
+      // console.table(mappedManagers);
       inquirer
         .prompt([
           {
@@ -203,8 +205,9 @@ const addEmployee = () => {
               role_id: response.employeeRole,
               manager_id: response.manager,
             },
-            (err) => {
+            (err, res) => {
               if (err) throw err;
+              console.log(res);
               console.log(
                 `Added ${response.firstName} ${response.lastName} to the database`
               );
@@ -250,7 +253,62 @@ const viewEmployees = () => {
 };
 
 // Update an employee role
-const updateEmployeeRole = () => {};
+const updateEmployeeRole = () => {
+  connection.query(
+    `SELECT r.id AS "role id", r.title, e.id AS "employee id", e.first_name, e.last_name FROM employee e LEFT JOIN role r ON e.role_id = r.id`,
+    (err, results) => {
+      if (err) throw err;
+      // console.log(results);
+      const mappedEmployees = results.map((employee) => {
+        return {
+          name: `${employee.first_name} ${employee.last_name}`,
+          value: employee.id, //not receiving id
+        };
+      });
+      const mappedRoles = results.map((role) => {
+        return {
+          name: role.title,
+          value: role.id, //not receiving id
+        };
+      });
+      console.table(mappedEmployees);
+      console.table(mappedRoles);
+      inquirer
+        .prompt([
+          {
+            name: "updatedEmployee",
+            type: "list",
+            message: "Which employee's role do you want to update?",
+            choices: mappedEmployees,
+          },
+          {
+            name: "employeeRole",
+            type: "list",
+            message: "Which role do you want to assign the selected employee?",
+            choices: mappedRoles,
+          },
+        ])
+        .then((response) => {
+          connection.query(
+            "UPDATE employee SET role_id = ? WHERE id = ?", //not updating because it cannot find the right role id nor the employee id
+            [
+              {
+                role_id: response.employeeRole,
+              },
+              {
+                id: response.updatedEmployee,
+              },
+            ],
+            (err) => {
+              if (err) throw err;
+              console.log(`Updated employee's role`);
+              start();
+            }
+          );
+        });
+    }
+  );
+};
 // Build a command-line application that at a minimum allows the user to:
 // Add departments, roles, employees
 // View departments, roles, employees

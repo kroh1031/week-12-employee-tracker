@@ -47,4 +47,22 @@ CREATE TABLE employee (
 
 -- -- need to ask user who the employee's manager 
 -- -- TODO: join role table from employee table 
--- SELECT r.id, r.title, CONCAT(m.first_name, ' ', m.last_name) AS 'manager' FROM employee e LEFT JOIN employee m ON e.id = m.manager_id LEFT JOIN role r ON e.role_id = r.id
+-- SELECT r.id, r.title, CONCAT(m.first_name, ' ', m.last_name) AS 'manager' 
+-- FROM employee e 
+-- LEFT JOIN employee m 
+--    ON e.id = m.manager_id 
+-- LEFT JOIN role r 
+--    ON e.role_id = r.id
+
+-- TODO: What do you need to update employee role? 
+-- SELECT r.title, e.first_name, e.last_name 
+-- FROM employee e 
+-- LEFT JOIN role r 
+--    ON e.role_id = r.id
+
+-- Trying to update an employee's role by joining the employee table with the role table so that based on the input of which employee the user wants to update, the title of the role from the role table can be updated as well.
+-- The employee table only has the role_id, and not the title of the role, which is only in the role table.
+-- UPDATE employee SET role_id = 8 WHERE id = 4
+
+-- need to get role id and role title and employee first and last name and employee id
+-- SELECT r.id AS "role id", r.title, e.id AS "employee id", e.first_name, e.last_name FROM employee e LEFT JOIN role r ON e.role_id = r.id
