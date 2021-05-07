@@ -70,7 +70,8 @@ const start = () => {
           connection.end();
           break;
       }
-    });
+    })
+    .catch((err) => console.log(err));
 };
 
 // Add new department
@@ -150,18 +151,19 @@ const addRole = () => {
 
 // Add new employee
 const addEmployee = () => {
-  connection.query(
-    "SELECT r.id, r.title, m.first_name, m.last_name FROM employee e LEFT JOIN employee m ON e.id = m.manager_id LEFT JOIN role r ON e.role_id = r.id",
-    (err, results) => {
+  connection.query("SELECT * from role", (err, results) => {
+    if (err) throw err;
+    console.table(results);
+    const mappedRoles = results.map((role) => {
+      return {
+        name: role.title,
+        value: role.id,
+      };
+    });
+
+    connection.query("SELECT * from employee", (err, results2) => {
       if (err) throw err;
-      console.table(results);
-      const mappedRoles = results.map((role) => {
-        return {
-          name: role.title,
-          value: role.id,
-        };
-      });
-      const mappedManagers = results.map((manager) => {
+      const mappedManagers = results2.map((manager) => {
         return {
           name: `${manager.first_name} ${manager.last_name}`,
           value: manager.id,
@@ -197,6 +199,7 @@ const addEmployee = () => {
           },
         ])
         .then((response) => {
+          console.log("managed", response.manager);
           connection.query(
             "INSERT INTO employee SET ?",
             {
@@ -207,7 +210,6 @@ const addEmployee = () => {
             },
             (err, res) => {
               if (err) throw err;
-              console.log(res);
               console.log(
                 `Added ${response.firstName} ${response.lastName} to the database`
               );
@@ -215,8 +217,8 @@ const addEmployee = () => {
             }
           );
         });
-    }
-  );
+    });
+  });
 };
 
 // View all departments
@@ -243,7 +245,7 @@ const viewRoles = () => {
 // View all employees
 const viewEmployees = () => {
   connection.query(
-    "SELECT e.id, e.first_name, e.last_name, r.title AS role, d.name AS department, r.salary, CONCAT(m.first_name, ' ', m.last_name) AS 'manager' FROM employee e LEFT JOIN employee m ON e.id = m.manager_id LEFT JOIN role r ON e.role_id = r.id LEFT JOIN department d ON r.department_id = d.id",
+    "SELECT e.id, e.first_name, e.last_name, r.title AS role, d.name AS department, r.salary, CONCAT(m.first_name, ' ', m.last_name) AS 'manager' FROM employee e  LEFT JOIN role r ON e.role_id = r.id LEFT JOIN department d ON r.department_id = d.id LEFT JOIN employee m ON m.id = e.manager_id",
     (err, res) => {
       if (err) throw err;
       console.table(res);
@@ -255,24 +257,32 @@ const viewEmployees = () => {
 // Update an employee role
 const updateEmployeeRole = () => {
   connection.query(
-    `SELECT r.id AS "role id", r.title, e.id AS "employee id", e.first_name, e.last_name FROM employee e LEFT JOIN role r ON e.role_id = r.id`,
+    `SELECT r.id AS "role_id", r.title, e.id AS "employee_id", e.first_name, e.last_name FROM employee e RIGHT JOIN role r ON e.role_id = r.id`,
     (err, results) => {
       if (err) throw err;
       // console.log(results);
       const mappedEmployees = results.map((employee) => {
+        console.log("id", employee.employee_id);
         return {
           name: `${employee.first_name} ${employee.last_name}`,
-          value: employee.id, //not receiving id
+          value: employee.employee_id,
         };
       });
       const mappedRoles = results.map((role) => {
         return {
           name: role.title,
-          value: role.id, //not receiving id
+          value: role.role_id,
         };
       });
-      console.table(mappedEmployees);
-      console.table(mappedRoles);
+      let filteredRoles = [];
+
+      mappedRoles.forEach((role) => {
+        if (!filteredRoles.includes(role.value)) {
+          filteredRoles.push(role);
+        }
+      });
+      console.log(mappedEmployees);
+      console.log(mappedRoles);
       inquirer
         .prompt([
           {
@@ -285,20 +295,15 @@ const updateEmployeeRole = () => {
             name: "employeeRole",
             type: "list",
             message: "Which role do you want to assign the selected employee?",
-            choices: mappedRoles,
+            choices: filteredRoles,
           },
         ])
         .then((response) => {
+          console.log("role_id", response.employeeRole);
+          console.log("id", response.updatedEmployee);
           connection.query(
-            "UPDATE employee SET role_id = ? WHERE id = ?", //not updating because it cannot find the right role id nor the employee id
-            [
-              {
-                role_id: response.employeeRole,
-              },
-              {
-                id: response.updatedEmployee,
-              },
-            ],
+            "UPDATE employee SET role_id = ? WHERE id = ?",
+            [response.employeeRole, response.updatedEmployee],
             (err) => {
               if (err) throw err;
               console.log(`Updated employee's role`);
@@ -309,6 +314,7 @@ const updateEmployeeRole = () => {
     }
   );
 };
+
 // Build a command-line application that at a minimum allows the user to:
 // Add departments, roles, employees
 // View departments, roles, employees
