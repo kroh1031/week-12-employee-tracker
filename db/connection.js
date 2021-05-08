@@ -256,31 +256,26 @@ const viewEmployees = () => {
 
 // Update an employee role
 const updateEmployeeRole = () => {
-  connection.query(
-    `SELECT r.id AS "role_id", r.title, e.id AS "employee_id", e.first_name, e.last_name FROM employee e RIGHT JOIN role r ON e.role_id = r.id`,
-    (err, results) => {
+  connection.query(`SELECT * FROM role`, (err, results) => {
+    if (err) throw err;
+    // console.log(results);
+    const mappedRoles = results.map((role) => {
+      return {
+        name: role.title,
+        value: role.id,
+      };
+    });
+
+    connection.query(`SELECT * FROM employee`, (err, results2) => {
       if (err) throw err;
-      // console.log(results);
-      const mappedEmployees = results.map((employee) => {
-        console.log("id", employee.employee_id);
+      const mappedEmployees = results2.map((employee) => {
+        // console.log("id", employee.employee_id);
         return {
           name: `${employee.first_name} ${employee.last_name}`,
-          value: employee.employee_id,
+          value: employee.id,
         };
       });
-      const mappedRoles = results.map((role) => {
-        return {
-          name: role.title,
-          value: role.role_id,
-        };
-      });
-      let filteredRoles = [];
 
-      mappedRoles.forEach((role) => {
-        if (!filteredRoles.includes(role.value)) {
-          filteredRoles.push(role);
-        }
-      });
       console.log(mappedEmployees);
       console.log(mappedRoles);
       inquirer
@@ -295,12 +290,12 @@ const updateEmployeeRole = () => {
             name: "employeeRole",
             type: "list",
             message: "Which role do you want to assign the selected employee?",
-            choices: filteredRoles,
+            choices: mappedRoles,
           },
         ])
         .then((response) => {
-          console.log("role_id", response.employeeRole);
-          console.log("id", response.updatedEmployee);
+          // console.log("role_id", response.employeeRole);
+          // console.log("id", response.updatedEmployee);
           connection.query(
             "UPDATE employee SET role_id = ? WHERE id = ?",
             [response.employeeRole, response.updatedEmployee],
@@ -311,8 +306,8 @@ const updateEmployeeRole = () => {
             }
           );
         });
-    }
-  );
+    });
+  });
 };
 
 // Build a command-line application that at a minimum allows the user to:
