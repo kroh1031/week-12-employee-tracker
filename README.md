@@ -36,7 +36,7 @@ Here's the link to my walkthrough video that demonstrates the app's functionalit
 [Employee Tracker Project Walkthrough Video!](https://drive.google.com/file/d/1T--L6_IcM3BIUufpP6rfepwFFoMJ6obN/view/)
 
 The following image shows a mock-up of the application when launched:
-![List of choices of what the user would like to do](https://github.com/kroh1031/week-12-employee-tracker/raw/main/db/employee-tracker-choices.png)
+![List of choices of what the user would like to do](./db/employee-tracker-choices.PNG)
 
 ## License
 
