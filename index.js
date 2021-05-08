@@ -44,6 +44,7 @@ const start = () => {
           updateEmployeeRole();
           break;
         default:
+          console.log("Goodbye");
           connection.end();
           break;
       }
@@ -253,8 +254,8 @@ const updateEmployeeRole = () => {
         };
       });
 
-      console.log(mappedEmployees);
-      console.log(mappedRoles);
+      // console.log(mappedEmployees);
+      // console.log(mappedRoles);
       inquirer
         .prompt([
           {
@@ -289,20 +290,6 @@ const updateEmployeeRole = () => {
 
 connection.connect((err) => {
   if (err) throw err;
-  console.log(`Connected as id ${connection.threadId}`);
+  // console.log(`Connected as id ${connection.threadId}`);
   start();
 });
-// Build a command-line application that at a minimum allows the user to:
-// Add departments, roles, employees
-// View departments, roles, employees
-// Update employee roles
-
-//What would you like to do?
-//Add Department
-//Add Role
-//Add Employee
-//View All Departments
-//View All Roles
-//View All Employees
-//Update Employee Role
-//Quit
