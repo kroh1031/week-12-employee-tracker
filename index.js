@@ -131,7 +131,7 @@ const addRole = () => {
 const addEmployee = () => {
   connection.query("SELECT * from role", (err, results) => {
     if (err) throw err;
-    console.table(results);
+    // console.table(results);
     const mappedRoles = results.map((role) => {
       return {
         name: role.title,

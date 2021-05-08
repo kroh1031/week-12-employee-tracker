@@ -33,10 +33,10 @@ npm start
 ## Usage
 
 Here's the link to my walkthrough video that demonstrates the app's functionality:  
-[Employee Tracker Project Walkthrough Video!](https://drive.google.com/)
+[Employee Tracker Project Walkthrough Video!](https://drive.google.com/file/d/1T--L6_IcM3BIUufpP6rfepwFFoMJ6obN/view/)
 
 The following image shows a mock-up of the application when launched:
-![List of choices of what the user would like to do](./db/employee-tracker-choices.png)
+![List of choices of what the user would like to do](/db/employee-tracker-choices.png)
 
 ## License
 
@@ -47,11 +47,3 @@ https://opensource.org/licenses/MIT
 
 If you have any questions about the repo, open an issue or contact me directly at karenroh@hotmail.com.  
  You can find more of my work at [kroh1031](https://github.com/kroh1031).
-
-## Submission on BCS
-
-You are required to submit the following:
-
-- The URL of the GitHub repository
-
-- A video demonstrating the entirety of the app's functionality
